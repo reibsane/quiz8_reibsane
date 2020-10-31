@@ -1,23 +1,19 @@
-const { Int32 } = require("mongodb")
 const mongoose = require("mongoose")
+const budgetModel = require("./models/budget_schema")
 
-const budgetSchema = new mongoose.Schema({
-    title: {
-        type: String,
-        required: true,
-        unique: true 
-    },
+let url = 'mongodb://localhost:27017/chart_data';
 
-    budget: {
-        type: Int32,
-        required: true,
-        unique: false 
-    },
-
-    color: {
-        type: String,
-        required: true,
-        unique: true 
-    }
-
-}, {collection: 'budget_data'})
+mongoose.connect(url, {useNewUrlParser: true, useUnifiedTopology: true})
+.then(()=>{
+    console.log("Connected to the database")
+    budgetModel.find({})
+    .then((data)=>{
+        console.log(data)
+    })
+    .catch((connectionError)=>{
+        console.log(mongoose.connectionError)
+    })
+})
+.catch((connectionError)=>{
+    console.log(connectionError)
+})
